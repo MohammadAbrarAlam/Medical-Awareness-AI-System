@@ -1,0 +1,15 @@
+crewai
+crewai-tools
+python-dotenv
+
+# LLM + AI support (Google Gemini)
+google-generativeai
+
+# Web framework (for your index.html app)
+flask
+
+# Search tool (Serper API integration via crewai-tools)
+requests
+
+# Optional but useful for future upgrades
+gunicorn

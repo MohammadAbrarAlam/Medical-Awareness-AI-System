@@ -1,0 +1,177 @@
+/* =========================
+   GLOBAL STYLES
+========================= */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: white;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero {
+    text-align: center;
+    padding: 60px 20px 20px;
+    animation: fadeInDown 1s ease;
+}
+
+.hero h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+.hero p {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+}
+
+
+/* =========================
+   GLASS CARD UI
+========================= */
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    transition: 0.4s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+
+/* =========================
+   INPUT BOX
+========================= */
+
+.input-box {
+    border-radius: 12px;
+    padding: 15px;
+    border: none;
+    outline: none;
+}
+
+
+/* =========================
+   BUTTON STYLE
+========================= */
+
+.btn-gradient {
+    background: linear-gradient(135deg, #4f46e5, #06b6d4);
+    border: none;
+    transition: 0.3s ease;
+}
+
+.btn-gradient:hover {
+    transform: scale(1.03);
+}
+
+
+/* =========================
+   LOADER
+========================= */
+
+.loader {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.loader p {
+    margin-top: 10px;
+    color: #cbd5e1;
+}
+
+
+/* =========================
+   RESULT CARD
+========================= */
+
+.result-card {
+    animation: fadeInUp 0.8s ease;
+    margin-top: 30px;
+}
+
+
+/* =========================
+   FLASH CARD OUTPUT
+========================= */
+
+.flash-card {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 15px;
+    border-left: 4px solid #06b6d4;
+    transition: 0.3s ease;
+}
+
+.flash-card:hover {
+    transform: scale(1.02);
+}
+
+
+/* =========================
+   TEXT OUTPUT
+========================= */
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 14px;
+    color: #e2e8f0;
+}
+
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    .glass-card {
+        margin: 10px;
+    }
+}
