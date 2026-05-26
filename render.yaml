@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: medical-awareness-ai
+    name: medical-awareness-ai-system
     env: python
     plan: free
 

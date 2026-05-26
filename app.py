@@ -4,7 +4,7 @@
 
 from flask import Flask, request, jsonify
 from crews import medical_awareness_crew
-import os
+
 app = Flask(__name__)
 
 
@@ -80,5 +80,6 @@ def analyze():
 
 
 if __name__ == "__main__":
+    import os
     port = int(os.environ.get("PORT", 5000))
-    app.run(debug=False, host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port)
