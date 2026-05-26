@@ -4,9 +4,9 @@ services:
     env: python
     plan: free
 
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    buildCommand: pip install --upgrade pip && pip install --only-binary=:all: -r requirements.txt
 
-    startCommand: python app.py
+    startCommand: gunicorn app:app
 
     envVars:
       - key: GEMINI_API_KEY
