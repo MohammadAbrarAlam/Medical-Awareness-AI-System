@@ -4,4 +4,3 @@ python-dotenv
 crewai
 crewai-tools
 google-generativeai
-tiktoken
