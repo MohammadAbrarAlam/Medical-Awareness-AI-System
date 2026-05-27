@@ -1,8 +1,6 @@
-Flask==3.0.3
-gunicorn==21.2.0
-python-dotenv==1.0.0
-google-generativeai==0.6.0
-langchain-google-genai==1.0.3
-crewai==0.28.8
-crewai-tools==0.1.6
-tiktoken==0.7.0
+crewai
+crewai-tools
+langchain-google-genai
+python-dotenv
+flask
+gunicorn
