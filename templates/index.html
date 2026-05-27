@@ -5,80 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medical Awareness AI</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <!-- External CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-
 <body>
 
-<!-- HERO -->
-<div class="hero">
+<div class="hero text-center py-5">
     <h1>🩺 Medical Awareness AI</h1>
     <p>AI-powered health assistant for disease awareness, prevention & education</p>
 </div>
 
-<!-- INPUT SECTION -->
 <div class="container">
 
     <div class="glass-card p-4">
 
-        <form method="POST" id="medicalForm">
+        <form action="/" method="POST" id="medicalForm">
 
             <input
                 type="text"
                 name="topic"
-                class="form-control form-control-lg mb-3 input-box"
-                placeholder="Enter disease or medical topic (e.g., Diabetes, Cancer)"
+                class="form-control form-control-lg mb-3"
+                placeholder="Enter disease or medical topic (e.g. Diabetes)"
                 required
             >
 
-            <button class="btn btn-primary btn-lg w-100 btn-gradient">
+            <button type="submit" class="btn btn-primary btn-lg w-100">
                 🚀 Generate Medical Report
             </button>
         </form>
 
-        <!-- Loader -->
-        <div class="loader mt-4" id="loader">
+        <div class="loader mt-4" id="loader" style="display:none;">
             <div class="spinner-border text-info"></div>
             <p>Analyzing medical data...</p>
         </div>
 
     </div>
 
-    <!-- RESULT -->
     {% if result %}
     <div class="result-card mt-5">
-
-        <div class="glass-card">
-
+        <div class="glass-card p-4">
             <h3>📋 Medical Awareness Report</h3>
-
-            <div class="flash-card">
-                <h5>🧠 AI Generated Insight</h5>
-                <pre>{{ result }}</pre>
-            </div>
-
+            <pre style="white-space: pre-wrap;">{{ result }}</pre>
         </div>
-
     </div>
     {% endif %}
 
 </div>
 
-<!-- JS -->
 <script>
-    const form = document.getElementById("medicalForm");
-    const loader = document.getElementById("loader");
+const form = document.getElementById("medicalForm");
+const loader = document.getElementById("loader");
 
-    form.addEventListener("submit", function () {
-        loader.style.display = "block";
-    });
+form.addEventListener("submit", function () {
+    loader.style.display = "block";
+});
 </script>
 
 </body>
