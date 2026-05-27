@@ -44,8 +44,14 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/analyze", methods=["POST"])
+@app.route("/analyze", methods=["GET", "POST"])
 def analyze():
+
+    # If opened directly in browser
+    if request.method == "GET":
+        return render_template("index.html")
+
+    # POST request from frontend form
     data = request.get_json()
 
     if not data:
