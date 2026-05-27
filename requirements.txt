@@ -1,5 +1,6 @@
-crewai
-crewai-tools
-python-dotenv
-flask
-gunicorn
+crewai[google-genai]==0.130.0
+crewai-tools==0.47.1
+google-genai>=1.16.1
+python-dotenv==1.0.1
+flask==3.0.3
+gunicorn==22.0.0

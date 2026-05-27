@@ -2,72 +2,65 @@
 # Medical Awareness App Entry Point (Flask)
 # ==========================================
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
+import os
 from crews import medical_awareness_crew
 
 app = Flask(__name__)
 
 
 # ==========================================
-# Core Function (Crew Runner)
+# Core Function
 # ==========================================
-def run_medical_awareness(topic: str):
-    """
-    Run the Medical Awareness Crew for a given topic.
-    """
-
+def run_medical_awareness(topic):
     if not topic:
         return {"error": "Topic is required"}
 
-    print("\n====================================")
-    print(f"Starting Medical Analysis for: {topic}")
-    print("====================================\n")
-
     try:
-        # Run CrewAI workflow
         result = medical_awareness_crew.kickoff(
             inputs={"topic": topic}
         )
 
-        print("\n====================================")
-        print("FINAL MEDICAL REPORT GENERATED")
-        print("====================================\n")
-
-        return {"success": True, "topic": topic, "result": str(result)}
+        return {
+            "success": True,
+            "topic": topic,
+            "result": str(result)
+        }
 
     except Exception as e:
-        print("Error occurred:", str(e))
-        return {"success": False, "error": str(e)}
+        print(f"Error: {e}")
+        return {
+            "success": False,
+            "error": str(e)
+        }
 
 
 # ==========================================
-# Flask Routes
+# Routes
 # ==========================================
 
 @app.route("/")
 def home():
-    return jsonify({
-        "message": "🩺 Medical Awareness AI System Running",
-        "status": "active"
-    })
+    return render_template("index.html")
 
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
-    """
-    API endpoint to analyze medical topic
-    Expected JSON:
-    {
-        "topic": "diabetes"
-    }
-    """
-
     data = request.get_json()
 
-    if not data or "topic" not in data:
-        return jsonify({"error": "Topic is required"}), 400
+    if not data:
+        return jsonify({
+            "success": False,
+            "error": "No JSON data received"
+        }), 400
 
-    topic = data["topic"]
+    topic = data.get("topic")
+
+    if not topic:
+        return jsonify({
+            "success": False,
+            "error": "Topic is required"
+        }), 400
 
     result = run_medical_awareness(topic)
 
@@ -78,8 +71,10 @@ def analyze():
 # Run Server
 # ==========================================
 
-
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False
+    )
