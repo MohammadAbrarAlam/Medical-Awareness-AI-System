@@ -1,6 +1,7 @@
 flask
 gunicorn
 python-dotenv
-crewai
-crewai-tools
 google-generativeai
+tiktoken==0.7.0
+crewai==0.11.2
+crewai-tools
