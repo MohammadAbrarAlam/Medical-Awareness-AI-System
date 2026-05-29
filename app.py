@@ -5,6 +5,7 @@
 from flask import Flask, request, render_template
 import os
 from crews import medical_awareness_crew
+import time
 
 app = Flask(__name__)
 
@@ -16,18 +17,29 @@ def run_medical_awareness(topic):
     if not topic:
         return "Topic is required"
 
-    try:
-        result = medical_awareness_crew.kickoff(
-            inputs={"topic": topic}
-        )
+    retries = 3
 
-        return str(result)
+    for attempt in range(retries):
+        try:
+            result = medical_awareness_crew.kickoff(
+                inputs={"topic": topic}
+            )
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return f"Error: {str(e)}"
+            return str(result)
 
+        except Exception as e:
+            error_message = str(e)
+            print(f"Attempt {attempt + 1} failed: {error_message}")
 
+            # Retry if Gemini overloaded
+            if "503" in error_message or "high demand" in error_message.lower():
+                if attempt < retries - 1:
+                    time.sleep(8)
+                    continue
+
+            return f"Error: {error_message}"
+
+    return "Service temporarily unavailable. Please try again in a few minutes."
 # ==========================================
 # Routes
 # ==========================================
