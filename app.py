@@ -4,8 +4,8 @@
 
 from flask import Flask, request, render_template
 import os
-from crews import medical_awareness_crew
 import time
+from crews import medical_awareness_crew
 
 app = Flask(__name__)
 
@@ -17,29 +17,38 @@ def run_medical_awareness(topic):
     if not topic:
         return "Topic is required"
 
-    retries = 3
+    retries = 4
 
     for attempt in range(retries):
         try:
             result = medical_awareness_crew.kickoff(
                 inputs={"topic": topic}
             )
-
             return str(result)
 
         except Exception as e:
             error_message = str(e)
             print(f"Attempt {attempt + 1} failed: {error_message}")
 
-            # Retry if Gemini overloaded
-            if "503" in error_message or "high demand" in error_message.lower():
+            # Handle Gemini quota exceeded (429)
+            if "429" in error_message or "quota" in error_message.lower():
                 if attempt < retries - 1:
-                    time.sleep(8)
+                    print("Quota exceeded. Waiting 35 seconds before retry...")
+                    time.sleep(35)
+                    continue
+
+            # Handle Gemini high demand (503)
+            elif "503" in error_message or "high demand" in error_message.lower():
+                if attempt < retries - 1:
+                    print("Model busy. Waiting 10 seconds before retry...")
+                    time.sleep(10)
                     continue
 
             return f"Error: {error_message}"
 
-    return "Service temporarily unavailable. Please try again in a few minutes."
+    return "Gemini API is temporarily busy or quota exceeded. Please try again after 1 minute."
+
+
 # ==========================================
 # Routes
 # ==========================================
@@ -52,7 +61,6 @@ def home():
 @app.route("/analyze", methods=["POST"])
 def analyze():
 
-    # Get topic from HTML form
     topic = request.form.get("topic")
 
     if not topic:
