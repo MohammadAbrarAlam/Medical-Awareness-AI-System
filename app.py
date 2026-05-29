@@ -5,6 +5,7 @@
 from flask import Flask, request, render_template
 import os
 import time
+import traceback
 from crews import medical_awareness_crew
 
 app = Flask(__name__)
@@ -15,7 +16,7 @@ app = Flask(__name__)
 # ==========================================
 def run_medical_awareness(topic):
     if not topic:
-        return "Topic is required"
+        return "Topic is required."
 
     retries = 4
 
@@ -28,53 +29,61 @@ def run_medical_awareness(topic):
 
         except Exception as e:
             error_message = str(e)
-            print(f"Attempt {attempt + 1} failed: {error_message}")
+            print(f"Attempt {attempt + 1} failed:")
+            traceback.print_exc()
 
-            # Handle Gemini quota exceeded (429)
+            # Gemini quota limit
             if "429" in error_message or "quota" in error_message.lower():
                 if attempt < retries - 1:
-                    print("Quota exceeded. Waiting 35 seconds before retry...")
                     time.sleep(35)
                     continue
 
-            # Handle Gemini high demand (503)
-            elif "503" in error_message or "high demand" in error_message.lower():
+            # Gemini temporary overload
+            if "503" in error_message or "high demand" in error_message.lower():
                 if attempt < retries - 1:
-                    print("Model busy. Waiting 10 seconds before retry...")
                     time.sleep(10)
                     continue
 
             return f"Error: {error_message}"
 
-    return "Gemini API is temporarily busy or quota exceeded. Please try again after 1 minute."
+    return "Service temporarily unavailable. Please try again after a minute."
 
 
 # ==========================================
 # Routes
 # ==========================================
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
-    return render_template("index.html")
+    return render_template("index.html", result=None)
 
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
+    try:
+        topic = request.form.get("topic", "").strip()
 
-    topic = request.form.get("topic")
+        if not topic:
+            return render_template(
+                "index.html",
+                result="Please enter a medical topic."
+            )
 
-    if not topic:
+        result = run_medical_awareness(topic)
+
         return render_template(
             "index.html",
-            result="Topic is required"
+            result=result
         )
 
-    result = run_medical_awareness(topic)
+    except Exception:
+        print("Unhandled Flask route error:")
+        traceback.print_exc()
 
-    return render_template(
-        "index.html",
-        result=result
-    )
+        return render_template(
+            "index.html",
+            result="Internal server error. Check Render logs for details."
+        )
 
 
 # ==========================================
@@ -85,6 +94,5 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(
         host="0.0.0.0",
-        port=port,
-        debug=False
+        port=port
     )
