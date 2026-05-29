@@ -1,6 +1,9 @@
-crewai==0.130.0
-google-generativeai>=0.8.5
-litellm>=1.72.0
 flask
 gunicorn
 python-dotenv
+
+crewai==0.130.0
+crewai-tools==0.38.1
+
+google-generativeai>=0.8.5
+litellm>=1.72.0
