@@ -29,7 +29,7 @@ def run_medical_awareness(topic):
 
         except Exception as e:
             error_message = str(e)
-            print(f"Attempt {attempt + 1} failed:")
+            print(f"Attempt {attempt + 1}: {error_message}")
             traceback.print_exc()
 
             # Gemini quota limit
@@ -38,7 +38,7 @@ def run_medical_awareness(topic):
                     time.sleep(35)
                     continue
 
-            # Gemini temporary overload
+            # Gemini high demand
             if "503" in error_message or "high demand" in error_message.lower():
                 if attempt < retries - 1:
                     time.sleep(10)
@@ -46,7 +46,7 @@ def run_medical_awareness(topic):
 
             return f"Error: {error_message}"
 
-    return "Service temporarily unavailable. Please try again after a minute."
+    return "Service temporarily unavailable. Please try again later."
 
 
 # ==========================================
@@ -76,13 +76,13 @@ def analyze():
             result=result
         )
 
-    except Exception:
-        print("Unhandled Flask route error:")
+    except Exception as e:
+        print("Flask Route Error:")
         traceback.print_exc()
 
         return render_template(
             "index.html",
-            result="Internal server error. Check Render logs for details."
+            result=f"Something went wrong: {str(e)}"
         )
 
 
@@ -94,5 +94,6 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(
         host="0.0.0.0",
-        port=port
+        port=port,
+        debug=False
     )
