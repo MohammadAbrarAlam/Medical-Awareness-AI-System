@@ -1,11 +1,12 @@
-flask
-gunicorn
-python-dotenv
+flask==3.0.3
+gunicorn==22.0.0
+python-dotenv==1.0.1
 
 crewai==0.130.0
 crewai-tools==0.38.1
 
-google-generativeai
-litellm
+google-generativeai==0.8.5
+litellm==1.74.3
 
 pydantic==2.10.6
+pydantic-core==2.27.2
