@@ -2,7 +2,7 @@
 # Medical Awareness App Entry Point (Flask)
 # ==========================================
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 import os
 from crews import medical_awareness_crew
 
@@ -14,25 +14,18 @@ app = Flask(__name__)
 # ==========================================
 def run_medical_awareness(topic):
     if not topic:
-        return {"error": "Topic is required"}
+        return "Topic is required"
 
     try:
         result = medical_awareness_crew.kickoff(
             inputs={"topic": topic}
         )
 
-        return {
-            "success": True,
-            "topic": topic,
-            "result": str(result)
-        }
+        return str(result)
 
     except Exception as e:
         print(f"Error: {e}")
-        return {
-            "success": False,
-            "error": str(e)
-        }
+        return f"Error: {str(e)}"
 
 
 # ==========================================
@@ -44,33 +37,24 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/analyze", methods=["GET", "POST"])
+@app.route("/analyze", methods=["POST"])
 def analyze():
 
-    # If opened directly in browser
-    if request.method == "GET":
-        return render_template("index.html")
-
-    # POST request from frontend form
-    data = request.get_json()
-
-    if not data:
-        return jsonify({
-            "success": False,
-            "error": "No JSON data received"
-        }), 400
-
-    topic = data.get("topic")
+    # Get topic from HTML form
+    topic = request.form.get("topic")
 
     if not topic:
-        return jsonify({
-            "success": False,
-            "error": "Topic is required"
-        }), 400
+        return render_template(
+            "index.html",
+            result="Topic is required"
+        )
 
     result = run_medical_awareness(topic)
 
-    return jsonify(result)
+    return render_template(
+        "index.html",
+        result=result
+    )
 
 
 # ==========================================
